@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.test.mybatis.mapper.TrainOrderMapper">
+    <select id="QueryOrderBySerialId" parameterType="string" resultType="TrainOrder">
+      select TOId id,TOSerialId serialId from TrainOrder where TOSerialId = #{serialId}
+    </select>
+    <insert id="CreateOrder" parameterType="cn.test.mybatis.po.TrainOrder">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into TrainOrder (TOSerialId) values (#{SerialId})
+    </insert>
+    <delete id="DeleteOrder" parameterType="int">
+        delete from TrainOrder where TOID=#{id}
+    </delete>
+    <update id="UpdateOrder" parameterType="cn.test.mybatis.po.TrainOrder">
+        update TrainOrder set TOSerialId=#{SerialId} where TOID=#{id}
+    </update>
+    <select id="QueryTrainOrderByCondition" parameterType="TrainOrderQueryVo" resultType="TrainOrderCustomer">
+        select  TOId id,TOSerialId serialId,TOStartStationName StartStationName  from TrainOrder where TOSerialId=#{orderCustomer.SerialId} and ToPassengerNames like '%${orderCustomer.passengerNames}%'
+    </select>
+    <resultMap id="trainOrderResultMap" type="TrainOrderCustomer">
+        <id column="TOId" property="id"></id>
+        <result column="TOSerialId" property="SerialId"/>
+        <result column="TOStartStationName" property="StartStationName"></result>
+        <result column="TOPassengerNames" property="PassengerNames"></result>
+    </resultMap>
+    <sql id="sql_QueryTrainOrderByCondition">
+        <if test="orderCustomer!=null">
+            <if test="orderCustomer.SerialId!=null and orderCustomer.SerialId!=''">
+                and TOSerialId=#{orderCustomer.SerialId}
+            </if>
+            <if test="orderCustomer.passengerNames!=null and orderCustomer.passengerNames!=''">
+                and ToPassengerNames like '%${orderCustomer.passengerNames}%'
+            </if>
+            <if test="ids!=null">
+                <foreach collection="ids" item="orderid" open="and toid in(" close=")" separator=",">
+                    #{orderid}
+                </foreach>
+            </if>
+        </if>
+    </sql>
+    <select id="QueryTrainOrderByConditionForResultMap" parameterType="TrainOrderQueryVo"
+            resultMap="trainOrderResultMap">
+        select TOId,TOSerialId,TOStartStationName,TOPassengerNames from TrainOrder
+        <where>
+            <include refid="sql_QueryTrainOrderByCondition"></include>
+        </where>
+
+    </select>
+    <select id="QueryTrainOrderCount" parameterType="TrainOrderQueryVo" resultType="int">
+        select count(*) from TrainOrder
+        <where>
+            <include refid="sql_QueryTrainOrderByCondition"></include>
+        </where>
+
+    </select>
+</mapper>

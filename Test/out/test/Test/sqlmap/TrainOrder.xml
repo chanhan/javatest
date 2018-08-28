@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test">
+    <select id="queryById" parameterType="string" resultType="cn.test.mybatis.po.TrainOrder">
+      select TOId id,TOSerialId serialId from TrainOrder where TOSerialId = #{serialId}
+    </select>
+    <select id="queryByName" parameterType="string" resultType="cn.test.mybatis.po.TrainOrder">
+        select TOId id,TOSerialId serialId from TrainOrder where ToPassengerNames like '%${value}%'
+    </select>
+    <insert id="addOrder" parameterType="cn.test.mybatis.po.TrainOrder">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into TrainOrder (TOSerialId) values (#{SerialId})
+    </insert>
+    <delete id="delOrder" parameterType="int">
+        delete from TrainOrder where TOID=#{id}
+    </delete>
+    <update id="updateOrder" parameterType="cn.test.mybatis.po.TrainOrder">
+        update TrainOrder set TOSerialId=#{SerialId} where TOID=#{id}
+    </update>
+</mapper>
