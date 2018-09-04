@@ -3,11 +3,29 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.test.mybatis.mapper.OrderAllMapper">
-<select id="findOrderPassenger" resultType="cn.test.mybatis.po.OrderAll">
-SELECT TOId id,
-TOSerialId SerialId,
-TPPassengerName passengerName,
-TPId passengerId
-FROM TrainOrder
-inner join TrainPassenger on TOId= TPOrderId limit 10;</select>
+    <select id="findOrderPassenger" resultType="cn.test.mybatis.po.OrderAll">
+                SELECT TOId id,
+                TOSerialId SerialId,
+                TPPassengerName passengerName,
+                TPId passengerId
+                FROM TrainOrder
+                inner join TrainPassenger on TOId= TPOrderId limit 10;
+</select>
+    <resultMap id="OrderPassengerResultMap" type="cn.test.mybatis.po.TrainOrder">
+        <id column="TOId" property="id"></id>
+        <result column="TOSerialId" property="SerialId"></result>
+
+        <association property="activity" javaType="cn.test.mybatis.po.TrainActivity">
+            <id column="TOAId" property="activityId"></id>
+            <result column="TOAWXCardNo" property="activityNo"></result>
+        </association>
+    </resultMap>
+    <select id="findOrderActivityResultMap" resultMap="OrderPassengerResultMap">
+                SELECT TOId ,
+                TOSerialId ,
+                TOAWXCardNo ,
+                TOAId
+                FROM TrainOrder
+                inner join TrainOffActivities on TOId= TOAOrderId limit 10;
+</select>
 </mapper>

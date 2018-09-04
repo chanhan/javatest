@@ -2,6 +2,7 @@ package cn.test.mybatis.unittest;
 
 import cn.test.mybatis.mapper.OrderAllMapper;
 import cn.test.mybatis.po.OrderAll;
+import cn.test.mybatis.po.TrainOrder;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -25,10 +26,19 @@ public class OrderAllMapperTest {
 
     @Test
     public void findOrderPassenger() throws Exception {
-        SqlSession sqlSession=factory.openSession();
-        OrderAllMapper orderAllMapper=sqlSession.getMapper(cn.test.mybatis.mapper.OrderAllMapper.class);
-        List<OrderAll> list=orderAllMapper.findOrderPassenger();
+        SqlSession sqlSession = factory.openSession();
+        OrderAllMapper orderAllMapper = sqlSession.getMapper(cn.test.mybatis.mapper.OrderAllMapper.class);
+        List<OrderAll> list = orderAllMapper.findOrderPassenger();
         System.out.println(list);
+        sqlSession.close();
+    }
+
+    @Test
+    public void findOrderActivityResultMap() throws Exception {
+        SqlSession sqlSession = factory.openSession();
+        OrderAllMapper orderAllMapper = sqlSession.getMapper(cn.test.mybatis.mapper.OrderAllMapper.class);
+        List<TrainOrder> orders = orderAllMapper.findOrderActivityResultMap();
+        System.out.println(orders);
         sqlSession.close();
     }
 }

@@ -21,16 +21,6 @@ public class TrainOrder {
         return SerialId;
     }
 
-    @Override
-    public String toString() {
-        return "TrainOrder{" +
-                "id=" + id +
-                ", SerialId='" + SerialId + '\'' +
-                ", PassengerNames='" + PassengerNames + '\'' +
-                ", StartStationName='" + StartStationName + '\'' +
-                '}';
-    }
-
     public void setSerialId(String serialId) {
         SerialId = serialId;
     }
@@ -54,4 +44,25 @@ public class TrainOrder {
 
     private String StartStationName;
 
+
+    public TrainActivity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(TrainActivity activity) {
+        this.activity = activity;
+    }
+
+    private TrainActivity activity;
+
+    @Override
+    public String toString() {
+        return "TrainOrder{" +
+                "id=" + id +
+                ", SerialId='" + SerialId + '\'' +
+                ", PassengerNames='" + PassengerNames + '\'' +
+                ", StartStationName='" + StartStationName + '\'' +
+                ", activity=" + activity +
+                '}';
+    }
 }
